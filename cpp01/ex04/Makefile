@@ -6,16 +6,16 @@
 #    By: imisumi-wsl <imisumi-wsl@student.42.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 12:43:01 by imisumi           #+#    #+#              #
-#    Updated: 2024/02/02 16:50:45 by imisumi-wsl      ###   ########.fr        #
+#    Updated: 2024/02/07 16:27:09 by imisumi-wsl      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = UnnecessaryViolence
+NAME = Sed
 
 CC = c++
 
-CFLAGS = -std=c++11
-CFLAGS += -Wall -Wextra -Werror
+CFLAGS = -std=c++23
+CFLAGS += -Wall -Wextra -Werror -g
 
 SRCDIR		:= src
 INCDIR		:= include
@@ -35,7 +35,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "Compiled "$<" successfully!"
 
 run: all
-	@./$(NAME)
+	@./$(NAME) ./input "s" "ss"
 	
 clean:
 	@rm -rf $(OBJDIR)
