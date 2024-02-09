@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
 	const std::string s2 = argv[3];
 
 	std::ifstream file(filename);
-	if (!file.is_open())
+	std::ofstream output(filename + ".replace");
+	if (!file.is_open() || !output.is_open())
 	{
 		std::cerr << "Failed to open file" << std::endl;
 		return EXIT_FAILURE;
@@ -35,7 +36,8 @@ int main(int argc, char *argv[])
 	while (std::getline(file, line))
 	{
 		replace(line, s1, s2, 0);
-		std::cout << line << std::endl;
+		// std::cout << line << std::endl;
+		output << line << std::endl;
 	}
 
 	return EXIT_SUCCESS;
