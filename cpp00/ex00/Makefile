@@ -3,22 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ichiro <ichiro@student.42.fr>              +#+  +:+       +#+         #
+#    By: imisumi-wsl <imisumi-wsl@student.42.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 12:43:01 by imisumi           #+#    #+#              #
-#    Updated: 2023/11/28 19:26:36 by ichiro           ###   ########.fr        #
+#    Updated: 2024/03/26 20:51:56 by imisumi-wsl      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = Megaphone
 
-CC = c++ 
+CC = c++
 
 CFLAGS = -std=c++11
 CFLAGS += -Wall -Wextra -Werror
 
 SRCDIR		:= src
-INCDIR		:= include
 OBJDIR		:= .obj
 
 SOURCES		:= $(wildcard $(SRCDIR)/**/*.cpp) $(wildcard $(SRCDIR)/*.cpp)
@@ -31,7 +30,7 @@ $(NAME): $(OBJECTS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I $(INCDIR) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 	@echo "Compiled "$<" successfully!"
 
 run: all
