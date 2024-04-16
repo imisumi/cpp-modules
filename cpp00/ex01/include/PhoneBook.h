@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PhoneBook.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ichiro <ichiro@student.42.fr>              +#+  +:+       +#+        */
+/*   By: imisumi <imisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:57:48 by ichiro            #+#    #+#             */
-/*   Updated: 2023/11/28 16:57:49 by ichiro           ###   ########.fr       */
+/*   Updated: 2024/04/16 16:33:06 by imisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ public:
 
 	void	addContact(void);
 	void	displayContacts(void);
-	int		getContactCount(void) const { return (m_contactCount); }
-	void	printContactInfo(int index) const { m_contacts[index].printContactInfo(); }
+	int		getContactCount(void) const;
+	void	printContactInfo(int index) const;
 
 private:
 	Contact	m_contacts[MAX_CONTACTS];

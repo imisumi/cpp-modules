@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ichiro <ichiro@student.42.fr>              +#+  +:+       +#+        */
+/*   By: imisumi <imisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:57:16 by ichiro            #+#    #+#             */
-/*   Updated: 2023/11/28 16:57:20 by ichiro           ###   ########.fr       */
+/*   Updated: 2024/04/16 16:34:46 by imisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	inputLoop()
 	while (true)
 	{
 		std::cout << CYAN << "Enter a command: " << RESET;
-		std::getline(std::cin, input);
+		if (!std::getline(std::cin, input))
+			exit(0);
 		if (input == "EXIT")
 			break ;
 		else if (input == "ADD")
@@ -42,7 +43,8 @@ void	inputLoop()
 			while (true)
 			{
 				std::cout << CYAN << "Enter an index: " << RESET;
-				std::getline(std::cin, input);
+				if (!std::getline(std::cin, input))
+					exit(0);
 				if (input.length() == 1 && std::isdigit(input[0]) && std::stoi(input) < phoneBook.getContactCount())
 				{
 					phoneBook.printContactInfo(std::stoi(input));

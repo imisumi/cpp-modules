@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PhoneBook.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ichiro <ichiro@student.42.fr>              +#+  +:+       +#+        */
+/*   By: imisumi <imisumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:57:41 by ichiro            #+#    #+#             */
-/*   Updated: 2023/11/28 16:57:43 by ichiro           ###   ########.fr       */
+/*   Updated: 2024/04/16 16:35:08 by imisumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ PhoneBook::PhoneBook()
 PhoneBook::~PhoneBook()
 {
 
+}
+
+int PhoneBook::getContactCount(void) const
+{
+	return (m_contactCount);
+}
+
+void	PhoneBook::printContactInfo(int index) const
+{
+	m_contacts[index].printContactInfo();
 }
 
 bool	isWhiteSpaceOnly(const std::string& str)
@@ -45,7 +55,8 @@ std::string getInput(const std::string& prompt)
 	while (true)
 	{
 		std::cout << BLUE << prompt << RESET;
-		std::getline(std::cin, input);
+		if (!std::getline(std::cin, input))
+			exit(0);
 		if (isWhiteSpaceOnly(input))
 		{
 			std::cout << RED << "Invalid input." << RESET << std::endl;
