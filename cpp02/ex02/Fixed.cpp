@@ -41,8 +41,9 @@ Fixed::~Fixed()
 // operator overloads
 Fixed&	Fixed::operator=(const Fixed &other)
 {
-	if (this != &other)
-		this->m_fixedPoint = other.m_fixedPoint;
+	if (this == &other)
+		return *this;
+	m_fixedPoint = other.getRawBits();
 	return *this;
 }
 
@@ -101,13 +102,13 @@ bool	Fixed::operator!=(const Fixed& other) const
 	return m_fixedPoint != other.m_fixedPoint;
 }
 
-Fixed&	Fixed::operator++(void)
+Fixed&	Fixed::operator++(void) // Pre-increment operator
 {
 	m_fixedPoint++;
 	return *this;
 }
 
-Fixed	Fixed::operator++(int)
+Fixed	Fixed::operator++(int) // Post-increment operator
 {
 	Fixed tmp(*this);
 	++m_fixedPoint;
