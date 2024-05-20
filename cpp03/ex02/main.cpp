@@ -1,4 +1,5 @@
 #include "ScavTrap.h"
+#include "FragTrap.h"
 
 void	attack(ClapTrap& attacker, ClapTrap& target, uint32_t damage)
 {
@@ -32,35 +33,30 @@ int main( void )
 	std::cout << std::endl;
 	const std::string name = "\e[1mBob\e[0m";
 	const std::string name2 = "\e[1mSteve\e[0m";
+	const std::string name3 = "\e[1mJohn\e[0m";
 
-	{
-		ScavTrap a(name);
-	}
+	ClapTrap a(name);
+	ScavTrap b(name2);
+	FragTrap c(name3);
+
 	std::cout << "\n";
 	{
-		ScavTrap a(name);
-		a.guardGate();
-		a.guardGate();
+		FragTrap a(name);
+		a.highFiveGuys();
 	}
 	std::cout << "\n";
 
-	ClapTrap	a(name);
-	ScavTrap	b = ScavTrap(name2);
-
-	std::cout << std::endl;
-	attack(a, b, 5);
-	attackScav(b, a, 3);
-	attack(a, b, 4);
+	attack(a, c, 5);
+	attackScav(b, c, 3);
+	attack(a, c, 4);
 
 	std::cout << std::endl;
 	a.beRepaired(5);
 	a.printStatus();
-	attackScav(b, a, 99);
-	attack(b, a, 99);
+	attackScav(b, c, 99);
+	attack(c, a, 99);
 
-	std::cout << std::endl;
-	a.beRepaired(5);
-
-	std::cout << std::endl;
+	
+	
 	return EXIT_SUCCESS;
 }

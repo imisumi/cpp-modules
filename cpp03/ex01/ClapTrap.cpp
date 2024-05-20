@@ -1,20 +1,26 @@
 #include "ClapTrap.h"
 
-ClapTrap::ClapTrap(const std::string& name)
-	: m_Name(name), m_HitPoints(10), m_EnergyPoints(10), m_AttackDamage(0)
+ClapTrap::ClapTrap()
+	: m_Name("Default")
 {
-	std::cout << m_Name << " spawned in" << std::endl;
+	std::cout << GREEN << m_Name << GREEN << " spawned in" << RESET;
+}
+
+ClapTrap::ClapTrap(const std::string& name)
+	: m_Name(name)
+{
+	std::cout << GREEN << m_Name << GREEN << " spawned in" << RESET;
 }
 
 ClapTrap::ClapTrap(const ClapTrap& other)
 	: m_Name(other.m_Name), m_HitPoints(other.m_HitPoints), m_EnergyPoints(other.m_EnergyPoints), m_AttackDamage(other.m_AttackDamage)
 {
-	std::cout << m_Name << " is cloned" << std::endl;
+	std::cout << BLUE << m_Name << BLUE <<" is cloned" << RESET;
 }
 
 ClapTrap::~ClapTrap()
 {
-	std::cout << m_Name << " despawned" << std::endl;
+	std::cout << RED << m_Name << RED << " despawned" << RESET;
 }
 
 ClapTrap&	ClapTrap::operator=(const ClapTrap& other)
@@ -23,7 +29,7 @@ ClapTrap&	ClapTrap::operator=(const ClapTrap& other)
 	m_HitPoints = other.m_HitPoints;
 	m_EnergyPoints = other.m_EnergyPoints;
 	m_AttackDamage = other.m_AttackDamage;
-	std::cout << m_Name << " is assigned" << std::endl;
+	std::cout << YELLOW << m_Name << YELLOW << " is assigned" << std::endl;
 	return *this;
 }
 
@@ -39,7 +45,7 @@ void	ClapTrap::attack(const std::string& target)
 		std::cout << m_Name << " can't attack, out of hit points" << std::endl;
 		return ;
 	}
-	std::cout << m_Name << " attacks " << target << " causing " << m_AttackDamage << " points of damage" << std::endl;
+	std::cout << "CT: " << m_Name << " attacks " << target << " causing " << m_AttackDamage << " points of damage" << std::endl;
 	m_EnergyPoints--;
 }
 
@@ -69,6 +75,8 @@ void	ClapTrap::beRepaired(uint32_t amount)
 	
 	}
 	std::cout << m_Name << " is repaired for " << amount << " points" << std::endl;
+	m_EnergyPoints--;
+	m_HitPoints += amount;
 }
 
 void	ClapTrap::setAttackDamage(uint32_t amount)

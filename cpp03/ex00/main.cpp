@@ -17,7 +17,10 @@ int main( void )
 	const std::string name2 = "\e[1mSteve\e[0m";
 	ClapTrap	a(name);
 	ClapTrap	b(name2);
-	// ClapTrap	b(a);
+	{
+		ClapTrap	c(a);
+		c = b;
+	}
 
 	std::cout << std::endl;
 	attack(a, b, 5);
