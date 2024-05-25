@@ -9,10 +9,13 @@ WrongCat::WrongCat()
 WrongCat::WrongCat(const WrongCat& other)
 	: WrongAnimal(other)
 {
+	std::cout << YELLOW << "WrongCat is born." << RESET;
 	if (this == &other)
+	{
+		m_Type = "WrongCat";
 		return ;
+	}
 	m_Type = other.m_Type;
-	std::cout << YELLOW << m_Type << " is born." << RESET;
 }
 
 WrongCat::~WrongCat()
@@ -22,14 +25,14 @@ WrongCat::~WrongCat()
 
 WrongCat& WrongCat::operator=(const WrongCat &other)
 {
+	std::cout << BLUE << other.m_Type << " is Cloned." << RESET;
 	if (this == &other)
 		return (*this);
 	m_Type = other.m_Type;
-	std::cout << BLUE << m_Type << " is born." << RESET;
 	return (*this);
 }
 
 void WrongCat::makeSound() const
 {
-	std::cout << "Meow meow" << std::endl;
+	std::cout << "Wrong meow meow" << std::endl;
 }

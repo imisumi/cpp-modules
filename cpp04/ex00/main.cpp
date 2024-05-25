@@ -39,4 +39,9 @@ int main()
 		std::cout << cat->getType() << " - ";
 		cat->makeSound();
 	}
+	std::cout << "4. ----------------------------------------------\n";
+	{
+		WrongCat cat;
+		cat = WrongCat();
+	}
 }

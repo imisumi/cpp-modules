@@ -9,10 +9,13 @@ Cat::Cat()
 Cat::Cat(const Cat& other)
 	: Animal(other)
 {
+	std::cout << YELLOW << "Cat is born." << RESET;
 	if (this == &other)
+	{
+		m_Type = "Cat";
 		return ;
+	}
 	m_Type = other.m_Type;
-	std::cout << YELLOW << m_Type << " is born." << RESET;
 }
 
 Cat::~Cat()
@@ -22,10 +25,10 @@ Cat::~Cat()
 
 Cat& Cat::operator=(const Cat &other)
 {
+	std::cout << BLUE << other.m_Type << " is cloned." << RESET;
 	if (this == &other)
 		return (*this);
 	m_Type = other.m_Type;
-	std::cout << BLUE << m_Type << " is born." << RESET;
 	return (*this);
 }
 

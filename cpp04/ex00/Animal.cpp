@@ -11,7 +11,7 @@ Animal::Animal(const Animal &other)
 	std::cout << YELLOW << "Animal copy constructor called" << RESET;
 	if (this == &other)
 		return ;
-	*this = other;
+	m_Type = other.m_Type;
 }
 
 Animal::~Animal()

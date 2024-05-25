@@ -11,7 +11,7 @@ WrongAnimal::WrongAnimal(const WrongAnimal &other)
 	std::cout << YELLOW << "WrongAnimal copy constructor called" << RESET;
 	if (this == &other)
 		return ;
-	*this = other;
+	m_Type = other.m_Type;
 }
 
 WrongAnimal::~WrongAnimal()
