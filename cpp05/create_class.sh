@@ -43,9 +43,9 @@ if [ "$default" = true ]; then
 #include <iostream>
 #include <utility>
 
-// #define DEBUG
+// #define DEBUG_MSG
 
-#ifdef DEBUG
+#ifdef DEBUG_MSG
     #define DEBUG_PRINT(msg) std::cout << msg << std::endl;
 #else
     #define DEBUG_PRINT(msg)
@@ -63,10 +63,10 @@ public:
 	// Copy assignment operator
 	$CLASS_NAME& operator=(const $CLASS_NAME&) = default;
 
-	// Move constructor (noexcept if all member-wise moves are noexcept)
+	// Move constructor
 	$CLASS_NAME($CLASS_NAME&&) noexcept = default;
 
-	// Move assignment operator (noexcept if all member-wise moves are noexcept)
+	// Move assignment operator
 	$CLASS_NAME& operator=($CLASS_NAME&&) noexcept = default;
 
 	// Destructor
