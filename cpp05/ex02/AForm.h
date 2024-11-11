@@ -9,29 +9,29 @@
 
 class Bureaucrat;
 
-class Form
+class AForm
 {
 public:
 	// Default constructor
-	Form() = delete;
+	AForm() = delete;
 
 	// Copy constructor
-	Form(const Form&) = default;
+	AForm(const AForm&) = default;
 
 	// Copy assignment operator
-	Form& operator=(const Form&) = default;
+	AForm& operator=(const AForm&) = default;
 
 	// Move constructor
-	Form(Form&&) noexcept = default;
+	AForm(AForm&&) noexcept = default;
 
 	// Move assignment operator
-	Form& operator=(Form&&) noexcept = default;
+	AForm& operator=(AForm&&) noexcept = default;
 
 	// Destructor
-	~Form() = default;
+	virtual ~AForm() = default;
 
 	// Custom constructor
-	Form(const std::string& name, int signGrade, int execGrade);
+	AForm(const std::string& name, int signGrade, int execGrade);
 
 
 	const std::string& getName() const;
@@ -39,6 +39,9 @@ public:
 	int getExecGrade() const;
 	bool isSigned() const;
 	void beSigned(const Bureaucrat& bureaucrat);
+	virtual void execute(const Bureaucrat& executor) const = 0;
+	void validateExecution(const Bureaucrat& executor) const;
+
 
 private:
 	class GradeTooHighException : public std::exception
@@ -53,6 +56,12 @@ private:
 		const char* what() const noexcept override;
 	};
 
+	class FormNotSignedException : public std::exception
+	{
+	public:
+		const char* what() const noexcept override;
+	};
+
 private:
 	const std::string m_Name;
 	const int m_SignGrade;
@@ -60,4 +69,4 @@ private:
 	bool m_IsSigned = false;
 };
 
-std::ostream&	operator<<(std::ostream &o, const Form& form);
+std::ostream&	operator<<(std::ostream &o, const AForm& form);

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 
-#include "Form.h"
+#include "AForm.h"
 
 #define MAX_GRADE 1
 #define MIN_GRADE 150
@@ -39,7 +39,9 @@ public:
 	void incrementGrade(int amount = 1);
 	void decrementGrade(int amount = 1);
 
-	void signForm(class Form& form);
+	void signForm(class AForm& form);
+
+	void executeForm(const AForm& form);
 
 private:
 	class GradeTooHighException : public std::exception
