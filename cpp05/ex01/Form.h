@@ -19,13 +19,13 @@ public:
 	Form(const Form&) = default;
 
 	// Copy assignment operator
-	Form& operator=(const Form&) = default;
+	Form& operator=(const Form&) = delete;
 
 	// Move constructor
 	Form(Form&&) noexcept = default;
 
 	// Move assignment operator
-	Form& operator=(Form&&) noexcept = default;
+	Form& operator=(Form&&) noexcept = delete;
 
 	// Destructor
 	~Form() = default;
