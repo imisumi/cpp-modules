@@ -1,7 +1,11 @@
 date,exchange_rate
+# Date before bitcoin release
 2009-01-02,0
-2009-01-05,0
-2009-01-08,0
+# Non leap year
+2009-02-29,0
+# Negative btc value
+2009-01-06,-0.1
+
 2009-01-11,0
 2009-01-14,0
 2009-01-17,0

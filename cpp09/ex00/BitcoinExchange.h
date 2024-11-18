@@ -29,19 +29,12 @@ public:
 	~BitcoinExchange() = default;
 
 	bool loadData(const std::filesystem::path& filename);
-	void log() const;
+	void logData() const;
 
 	float getExchangeRate(const std::chrono::year_month_day& date) const;
 
 private:
-	// bool isValidFloat(const std::string& str);
-	float validateExchangeRate(const std::string& rate);
-	// std::chrono::year_month_day validateDate(const std::string& date);
-
-	// float getExchangeRate(const std::chrono::year_month_day& date) const;
-
-private:
-	const std::chrono::year_month_day m_MinDate = std::chrono::year_month_day{ std::chrono::year{ 2009 }, std::chrono::month{ 1 }, std::chrono::day{ 9 } };
+	const std::chrono::year_month_day m_MinDate = std::chrono::year_month_day{ std::chrono::year{ 2009 }, std::chrono::month{ 1 }, std::chrono::day{ 3 } };
 	const std::chrono::year_month_day m_MaxDate = std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now());
 	// max date is today
 

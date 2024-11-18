@@ -1,56 +1,10 @@
 #include <iostream>
 
-#define CYAN "\033[36m"
-#define GREEN "\033[32m"
-#define RED "\033[31m"
-#define RESET "\033[0m\n"
-
-#include <iostream>
-#include <chrono>
-#include <ctime>
-
-#include <map>
-
-enum class Month : int
-{
-	January = 1,
-	February,
-	March,
-	April,
-	May,
-	June,
-	July,
-	August,
-	September,
-	October,
-	November,
-	December
-};
-
-#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vector>
-#include <string>
-
-#include <iostream>
-#include <string>
-#include <regex>
-
-// bool isValidUint(const std::string& str)
-// {
-// 	// Regex for an unsigned integer
-// 	std::regex uintRegex(R"(^\d+$)");  // Only digits allowed, no sign
-// 	return std::regex_match(str, uintRegex);
-// }
 
 #include "BitcoinExchange.h"
 #include "Utils.h"
-
-
-
-
-
 
 void exchangeData(const std::filesystem::path path, const BitcoinExchange& exchange)
 {
@@ -66,7 +20,7 @@ void exchangeData(const std::filesystem::path path, const BitcoinExchange& excha
 	while (std::getline(file, line))
 	{
 		lineNum++;
-		if (line.empty() || line[0] == '#')
+		if (line.empty() || line[0] == '#' || line == "date | value")
 			continue;
 		if (line.find(" | ") == std::string::npos)
 		{
@@ -93,7 +47,6 @@ void exchangeData(const std::filesystem::path path, const BitcoinExchange& excha
 			continue;
 		}
 
-		// std::cout << "Date: " << date << " Value: " << value << "\n";
 		const float rate = exchange.getExchangeRate(ymd);
 		if (rate == -1.0f)
 		{
@@ -101,19 +54,16 @@ void exchangeData(const std::filesystem::path path, const BitcoinExchange& excha
 			continue;
 		}
 		std::cout << date << " => " << value << " = " << val * rate << "\n";
-
-		// float f = 1;
-
-		
-
 	}
 	file.close();
 }
 
-
-
 int main(int argc, char *argv[])
 {
+	if (argc != 2)
+	{
+		return EXIT_FAILURE;
+	}
 	BitcoinExchange exchange;
 
 	if (!exchange.loadData("data.csv"))
@@ -121,9 +71,7 @@ int main(int argc, char *argv[])
 		std::cout << "Error: Could not load data from file.\n";
 		return EXIT_FAILURE;
 	}
-	// exchange.log();
-
-	exchangeData("input.txt", exchange);
-
-	return 0;
+	std::cout << CYAN << "Data loaded successfully." << RESET;
+	exchangeData(argv[1], exchange);
+	return EXIT_SUCCESS;
 }

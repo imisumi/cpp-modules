@@ -15,7 +15,9 @@ NAME = btc
 CC = c++ 
 
 CFLAGS = -std=c++20
-# CFLAGS += -Wall -Wextra -Werror -g
+CFLAGS += -Wall -Wextra -Werror
+
+ARGS := input.txt
 
 SRCDIR		:= .
 INCDIR		:= .
@@ -35,7 +37,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "Compiled "$<" successfully!"
 
 run: all
-	@./$(NAME)
+	@./$(NAME) $(ARGS)
 	
 clean:
 	@rm -rf $(OBJDIR)

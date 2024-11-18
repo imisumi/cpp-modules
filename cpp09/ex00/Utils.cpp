@@ -8,13 +8,6 @@ bool isValidFloat(const std::string& str)
 	return std::regex_match(str, floatRegex);
 }
 
-bool isValidUint(const std::string& str)
-{
-	// Regex for an unsigned integer
-	std::regex uintRegex(R"(^\d+$)");  // Only digits allowed, no sign
-	return std::regex_match(str, uintRegex);
-}
-
 std::chrono::year_month_day validateDate(const std::string& date)
 {
 	int year;
@@ -45,6 +38,7 @@ std::chrono::year_month_day validateDate(const std::string& date)
 
 /*
 ** stringToFloat: Converts a string to a float >= 0.0f
+** returns: -1.0f if the string is not a valid float
 */
 float stringToFloat(const std::string& rate)
 {
@@ -61,9 +55,5 @@ float stringToFloat(const std::string& rate)
 	{
 		return -1.0f;
 	}
-	// if (val < 0.0f)
-	// {
-	// 	return -1.0f;
-	// }
 	return val;
 }

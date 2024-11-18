@@ -5,40 +5,17 @@
 
 #include "Utils.h"
 
-float BitcoinExchange::validateExchangeRate(const std::string& rate)
-{
-	if (!isValidFloat(rate))
-	{
-		return -1.0f;
-	}
-	float val;
-	try
-	{
-		val = std::stof(rate);
-	}
-	catch (const std::exception& e)
-	{
-		return -1.0f;
-	}
-	//TODO: change to only < 0.0f
-	if (val < m_MinExchangeRate || val > m_MaxExchangeRate)
-	{
-		return -1.0f;
-	}
-	return val;
-}
-
 float BitcoinExchange::getExchangeRate(const std::chrono::year_month_day &date) const
 {
-	auto it = m_ExchangeMap.lower_bound(date);  // Find the first date >= input date
+	auto it = m_ExchangeMap.lower_bound(date);
 
-	if (it == m_ExchangeMap.begin()) {
-		// No valid date found that is lower, so return -1.0f (or handle as needed)
+	if (it == m_ExchangeMap.begin() && it->first != date)
+	{
 		return -1.0f;
 	}
 
-	if (it == m_ExchangeMap.end() || it->first != date) {
-		// Step back to the previous date, which will be the closest valid date before the input date
+	if (it == m_ExchangeMap.end() || it->first != date)
+	{
 		--it;
 	}
 
@@ -58,31 +35,29 @@ bool BitcoinExchange::loadData(const std::filesystem::path &filename)
 	while (std::getline(file, line))
 	{
 		lineNum++;
-		if (line.empty())
+		if (line.empty() || line[0] == '#' || line == "date,exchange_rate")
 			continue;
-		// std::cout << CYAN << "Line: " << line << RESET;
 
 		const std::string date = line.substr(0, line.find(','));
 		const std::string value = line.substr(line.find(',') + 1);
 
 		std::chrono::year_month_day ymd = validateDate(date);
-		if (!ymd.ok())
+		if (!ymd.ok() || ymd < m_MinDate || ymd > m_MaxDate)
 		{
-			std::cerr << "Ignoring invalid date of: " << date <<  ", on line: " << lineNum << "\n";
+			std::cerr << RED << "Dataset error, ignoring invalid date of: " << date <<  ", on line: " << lineNum << RESET;
 			continue;
 		}
 
-		// const float val = validateExchangeRate(value);
 		const float val = stringToFloat(value);
 		if (val < 0.0f)
 		{
-			std::cerr << "Ignoring invalid exchange rate of: " << value << ", on line: " << lineNum << "\n";
+			std::cerr << RED << "Dataset error, ignoring invalid exchange rate of: " << value << ", on line: " << lineNum << RESET;
 			continue;
 		}
 
 		if (m_ExchangeMap.find(ymd) != m_ExchangeMap.end())
 		{
-			std::cerr << "Error: Duplicate date found on line: " << lineNum << "\n";
+			std::cerr << RED << "Dataset error,  Duplicate date found on line: " << lineNum << RESET;
 			continue;
 		}
 		m_ExchangeMap[ymd] = val;
@@ -93,13 +68,10 @@ bool BitcoinExchange::loadData(const std::filesystem::path &filename)
 	return true;
 }
 
-void BitcoinExchange::log() const
+void BitcoinExchange::logData() const
 {
 	for (const auto& [date, rate] : m_ExchangeMap)
 	{
-		// std::cout << date << ": " << rate << "\n";
 		std::cout << "Date: " << int(date.year()) << "-" << unsigned(date.month()) << "-" << unsigned(date.day()) << " Rate: " << rate << "\n";
 	}
-	// std::cout << "Date: " << int(m_MaxDate.year()) << "-" << unsigned(m_MaxDate.month()) << "-" << unsigned(m_MaxDate.day()) << "\n";
-
 }
