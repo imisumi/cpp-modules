@@ -17,7 +17,14 @@ CC = c++
 CFLAGS = -std=c++20
 # CFLAGS += -Wall -Wextra -Werror
 
-ARGS := 11 2 17 0 16 8 6 15 10 3 21 1 18 9 14 19 12 5 4 20 13 7
+# ARGS := shuf -i 1-100000 -n 10 | tr "\n" " "
+# ARGS := $(shell shuf -i 0-100 -n 100 | tr '\n' ' ')
+# ARGS := $(shell shuf -i 0-100 -n 100 | tr '\n' ' ')
+# ARGS := $(shell shuf -i 0-100 -n 100 | uniq | tr '\n' ' ')
+
+ARGS := 11 2 17 0 16 8 6 15 10 3 21 1 18 9 14 19 12 5 4 20 13 17
+
+
 # ARGS := 11 2 21 0 16 8 6 15 10 3 17 1 18 9 14 19 12 5 4 20 13 7
 # ARGS := 2 1 3 4
 
