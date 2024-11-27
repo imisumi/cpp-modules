@@ -136,395 +136,6 @@ int _jacobsthal_number(long n)
 	return round((pow(2, n + 1) + pow(-1, n)) / 3);
 }
 
-// void testMerge(std::vector<int>& container, int pair_level, int recursionLevel = 1)
-// {
-
-// 	{
-// 		int pair_units_nbr = container.size() / pair_level;
-// 		bool isOdd = pair_units_nbr % 2 == 1;
-// 		if (pair_units_nbr < 2)
-// 		{
-// 			return; // Base case: less than two pairs, no need to sort
-// 		}
-// 		std::cout << "Recursion level: " << recursionLevel << std::endl;
-// 		for (auto num : container)
-// 		{
-// 			std::cout << num << " ";
-// 		}
-// 		std::cout << std::endl;
-// 		// std::cout << "Devide into pairs" << std::endl;
-// 		// print the container but every pair with a random color
-// 		int pair_size = pair_level * 2;
-// 		int pair_count = container.size() / pair_size;
-// 		int offset = 2 * pair_level;
-// 		int colorOffset = 0;
-// 		visualizePairs(container, offset);
-// 		// std::cout << "Sort pairs" << std::endl;
-// 		auto start = container.begin();
-// 		auto last = start + pair_level * pair_units_nbr;
-// 		auto end = last - (isOdd ? pair_level : 0);
-// 		for (auto it = start; it < end; it += offset)
-// 		{
-// 			auto thisPair = it + pair_level - 1;       // Last element of the current pair
-// 			auto nextPair = it + pair_level * 2 - 1;   // Last element of the next pair
-// 			if (*thisPair > *nextPair) {
-// 				std::swap_ranges(it, it + pair_level, it + pair_level);
-// 			}
-// 		}
-// 		visualizePairs(container, offset);
-
-// 		testMerge(container, pair_level * 2, recursionLevel + 1);
-// 		std::cout << "Main after pairing: ";
-// 		for (auto num : container)
-// 		{
-// 			std::cout << num << " ";
-// 		}
-// 		std::cout << std::endl;
-
-// 		std::vector<std::ranges::subrange<std::vector<int>::iterator>> main;
-// 		std::vector<std::ranges::subrange<std::vector<int>::iterator>> pend;
-// 		std::ranges::subrange<std::vector<int>::iterator> odd_element;
-// 		std::ranges::subrange<std::vector<int>::iterator> stray_numbers;
-// 		main.reserve(container.size());
-// 		pend.reserve(container.size());
-
-// 		main.push_back(std::ranges::subrange(container.begin(), container.begin() + pair_level));
-// 		main.push_back(std::ranges::subrange(container.begin() + pair_level, container.begin() + pair_level * 2));
-// 		if (isOdd)
-// 		{
-// 			// odd_element = std::ranges::subrange(container.end() - pair_level, container.end()) ;
-// 			odd_element = std::ranges::subrange(end, end + pair_level);
-// 			stray_numbers = std::ranges::subrange(end + pair_level, container.end());
-// 		}
-// 		else if (end != container.end())
-// 		{
-// 			stray_numbers = std::ranges::subrange(end, container.end());
-// 			// std::cout << "Stray numbers: ";
-// 			// for (auto it = stray_numbers.begin(); it != stray_numbers.end(); ++it)
-// 			// {
-// 			// 	std::cout << *it << " ";
-// 			// }
-// 			// std::cout << std::endl;
-// 		}
-// 		// log stray numbers
-// 		std::cout << YELLOW << "Stray numbers: ";
-// 		for (auto it = stray_numbers.begin(); it != stray_numbers.end(); ++it)
-// 		{
-// 			std::cout << *it << " ";
-// 		}
-// 		std::cout << RESET << std::endl;
-
-// 		// Insert the rest of the subranges into pend and main
-// 		for (int i = 4; i <= pair_units_nbr; i += 2)
-// 		{
-// 			pend.push_back(std::ranges::subrange(container.begin() + pair_level * (i - 2), container.begin() + pair_level * (i - 1)));
-// 			main.push_back(std::ranges::subrange(container.begin() + pair_level * (i - 1), container.begin() + pair_level * i));
-// 		}
-
-// 		// Log the main and pend subranges
-// 		std::cout << "Recursion level: " << recursionLevel << ", Main: ";
-// 		for (const auto& range : main)
-// 		{
-// 			for (auto it = range.begin(); it != range.end(); ++it)
-// 			{
-// 				if (it + 1 == range.end())
-// 					std::cout << CYAN << *it << RESET << " ";
-// 				else
-// 					std::cout << *it << " ";
-// 			}
-// 		}
-// 		std::cout << std::endl;
-
-// 		std::cout << "		    Pend: ";
-// 		for (const auto& range : pend) {
-// 			for (auto it = range.begin(); it != range.end(); ++it)
-// 			{
-// 				if (it + 1 == range.end())
-// 					std::cout << CYAN << *it << RESET << " ";
-// 				else
-// 					std::cout << *it << " ";
-// 			}
-// 		}
-// 		std::cout << std::endl;
-
-
-// 		std::cout << YELLOW << "Insert the pend into the main" << RESET << std::endl;
-// 		int prev_jacobsthal = _jacobsthal_number(1);
-// 		int temp_current_jacobsthal;
-// 		int inserted_numbers = 0;
-// 		for (int k = 2;; k++)
-// 		{
-// 			std::cout << "----------\n";
-// 			int current_jacobsthal = _jacobsthal_number(k);
-// 			int jacobsthal_diff = current_jacobsthal - prev_jacobsthal;
-// 			int offset = 0;
-// 			if (jacobsthal_diff > pend.size())
-// 			{
-// 				std::cout << YELLOW << "pend size < jacobsthal number, insert the rest of the pend into the main in sequential order" << RESET << std::endl;
-// 				temp_current_jacobsthal = current_jacobsthal;
-// 				break ;
-// 			}
-// 			int nbr_of_times = jacobsthal_diff;
-// 			auto pend_it = pend.begin();
-// 			std::advance(pend_it, jacobsthal_diff - 1);
-// 			auto main_start_it = main.begin();
-// 			std::advance(main_start_it, current_jacobsthal);
-// 			while (nbr_of_times)
-// 			{
-// 				std::ranges::subrange<std::vector<int>::iterator> head = *pend_it;
-// 				auto it = head.end();
-// 				std::advance(it, -1);
-// 				std::cout << "inserting: " << *it << std::endl;
-// 				auto sadas = std::upper_bound(main.begin(), main_start_it, *pend_it, [](const auto& a, const auto& b) { // upper_bound uses binary search
-// 					return *a.begin() < *b.begin();
-// 				});
-// 				auto main_insert_pos_it = main.insert(sadas, *pend_it);
-// 				pend_it = pend.erase(pend_it); // returns the next element
-// 				std::advance(pend_it, -1); // move the iterator back to the previous element
-
-// 				offset += (main_insert_pos_it - main_start_it) == current_jacobsthal + inserted_numbers; // dont understand this, yet.....
-// 				main_start_it = main.begin(); // TODO: can I just use main_start_it = main_insert_pos_it; instead?
-// 				std::advance(main_start_it, current_jacobsthal + offset);
-
-// 				nbr_of_times--;
-// 			}
-// 			prev_jacobsthal = current_jacobsthal;
-// 			inserted_numbers += jacobsthal_diff;
-// 		}
-
-
-// 		//TODO: this is wrong, fix it
-// 		if (pend.size())
-// 		{
-// 			// std::cout << YELLOW << "if pend size < jacobsthal number, insert the rest of the pend into the main in sequential order" << RESET << std::endl;
-// 			std::cout << "temp_current_jacobsthal: " << temp_current_jacobsthal << std::endl;
-// 		}
-// 		for (int i = 0; i < pend.size(); ++i)
-// 		{
-// 			std::cout << "inserting: " << *pend[i].begin() << std::endl;
-// 			// auto pend_it = pend.begin();
-// 			// std::advance(pend_it, i);
-// 			auto pend_it = pend.begin();
-// 			auto main_start_it = main.begin();
-// 			std::advance(main_start_it, temp_current_jacobsthal + i); // TODO: maby use jacobsthal diff instead
-
-// 			auto curr_bound = main.begin();
-// 			std::advance(curr_bound, main.size() - pend.size() + i);
-
-// 			auto insert_pos = std::upper_bound(main_start_it, curr_bound, pend[i], [](const auto& a, const auto& b) {
-// 				return *a.begin() < *b.begin();
-// 			});
-// 			std::advance(insert_pos, -1); // TODO: double check if this is correct
-// 			main.insert(insert_pos, pend[i]);
-// 			pend.erase(pend_it);
-
-// 			// auto current_
-// 			// auto sadas = std::upper_bound(main.begin(), main.end(), pend[i], [](const auto& a, const auto& b) {
-// 			// 	return *a.begin() < *b.begin();
-// 			// });
-// 			// main.insert(sadas, pend[i]);
-// 		}
-// 		std::cout << "Main: ";
-// 		for (const auto& range : main)
-// 		{
-// 			for (auto it = range.begin(); it != range.end(); ++it)
-// 			{
-// 				if (it + 1 == range.end())
-// 					std::cout << CYAN << *it << RESET << " ";
-// 				else
-// 					std::cout << *it << " ";
-// 			}
-// 		}
-// 		std::cout << std::endl;
-
-// 		std::cout << "Pend: ";
-// 		for (const auto& range : pend) {
-// 			for (auto it = range.begin(); it != range.end(); ++it)
-// 			{
-// 				if (it + 1 == range.end())
-// 					std::cout << CYAN << *it << RESET << " ";
-// 				else
-// 					std::cout << *it << " ";
-// 			}
-// 		}
-// 		std::cout << std::endl;
-
-// 		if (isOdd)
-// 		{
-// 			std::cout << YELLOW << "insert the last element of the container into the main" << RESET << std::endl;
-// 			std::cout << "Odd element: ";
-// 			for (auto it = odd_element.begin(); it != odd_element.end(); ++it)
-// 			{
-// 				std::cout << *it << " ";
-// 			}
-// 			std::cout << std::endl;
-// 			std::cout << "Main: ";
-
-// 			std::cout << "Inserting: " << *(odd_element.end() - 1) << std::endl;
-// 			std::cout << "Comparing against: ";
-// 			for (const auto& range : main)
-// 			{
-// 				for (auto it = range.begin(); it != range.end(); ++it)
-// 				{
-// 					if (it + 1 == range.end())
-// 						std::cout << CYAN << *it << RESET << " ";
-// 					else
-// 						std::cout << *it << " ";
-// 				}
-// 			}
-// 			std::cout << std::endl;
-// 			auto index = std::upper_bound(main.begin(), main.end(), odd_element, [](const auto& a, const auto& b) {
-// 				std::cout << "Comparing: " << *(a.end() - 1) << " " << *(b.end() - 1) << std::endl;
-// 				return *(a.end() - 1) < *(b.end() - 1);
-// 			});
-
-// 			main.insert(index, odd_element);
-
-// 			// auto last_element = container.end()
-// 			// log odd_element
-
-
-// 			for (const auto& range : main)
-// 			{
-// 				for (auto it = range.begin(); it != range.end(); ++it)
-// 				{
-// 					if (it + 1 == range.end())
-// 						std::cout << CYAN << *it << RESET << " ";
-// 					else
-// 						std::cout << *it << " ";
-// 				}
-// 			}
-// 			std::cout << std::endl;
-
-// 			std::cout << "Pend: ";
-// 			for (const auto& range : pend) {
-// 				for (auto it = range.begin(); it != range.end(); ++it)
-// 				{
-// 					if (it + 1 == range.end())
-// 						std::cout << CYAN << *it << RESET << " ";
-// 					else
-// 						std::cout << *it << " ";
-// 				}
-// 			}
-// 			std::cout << std::endl;
-// 		}
-
-// 		// std::vector<int> merged;
-// 		// merged.reserve(container.size());
-// 		// for (const auto& range : main)
-// 		// {
-// 		// 	for (auto it = range.begin(); it != range.end(); ++it)
-// 		// 	{
-// 		// 		merged.push_back(*it);
-// 		// 	}
-// 		// }
-// 		// if (merged.size() != container.size())
-// 		// {
-// 		// 	std::cout << YELLOW << "inserting stray numbers: ";
-// 		// 	for (auto it = stray_numbers.begin(); it != stray_numbers.end(); ++it)
-// 		// 	{
-// 		// 		std::cout << *it << " ";
-// 		// 	}
-// 		// 	std::cout << RESET << std::endl;
-
-// 		// 	merged.insert(merged.end(), stray_numbers.begin(), stray_numbers.end());
-// 		// }
-// 		// container = merged;
-
-
-
-
-
-// 		// std::vector<int> merged;
-// 		// merged.reserve(container.size());
-
-// 		// // Flatten the ranges in `main` directly.
-// 		// for (const auto& range : main)
-// 		// {
-// 		// 	std::ranges::copy(range, std::back_inserter(merged));
-// 		// }
-
-// 		// // Handle stray numbers, if any.
-// 		// if (merged.size() != container.size())
-// 		// {
-// 		// 	std::cout << YELLOW << "Inserting stray numbers: ";
-// 		// 	std::ranges::for_each(stray_numbers, [](const int& num) { std::cout << num << " "; });
-// 		// 	std::cout << RESET << std::endl;
-
-// 		// 	// Append stray numbers directly.
-// 		// 	merged.insert(merged.end(), stray_numbers.begin(), stray_numbers.end());
-// 		// }
-// 		// // log capacity
-// 		// std::cout << "Capacity: " << merged.capacity() << std::endl;
-// 		// std::cout << "Capacity: " << container.capacity() << std::endl;
-// 		// // Assign the merged result back to the container.
-// 		// container = merged;
-
-// 		std::vector<int> merged;
-// 		merged.reserve(container.size());
-
-// 		for (const auto& range : main)
-// 		{
-// 			merged.insert(merged.end(), range.begin(), range.end());
-// 		}
-// 		if (merged.size() != container.size())
-// 		{
-// 			merged.insert(merged.end(), stray_numbers.begin(), stray_numbers.end());
-// 		}
-// 		container = merged;
-
-// 		std::cout << "---------------------------------------------------" << std::endl;
-// 	}
-
-// }
-
-// void testMerge(std::vector<int>& container, int pair_level, int recursionLevel = 1)
-// {
-
-// 	{
-// 		int pair_units_nbr = container.size() / pair_level;
-// 		bool isOdd = pair_units_nbr % 2 == 1;
-// 		if (pair_units_nbr < 2)
-// 		{
-// 			return; // Base case: less than two pairs, no need to sort
-// 		}
-// 		std::cout << "Recursion level: " << recursionLevel << " pair_size: " << pair_level << std::endl;
-// 		for (auto num : container)
-// 		{
-// 			std::cout << num << " ";
-// 		}
-// 		std::cout << std::endl;
-// 		// std::cout << "Devide into pairs" << std::endl;
-// 		// print the container but every pair with a random color
-// 		int pair_size = pair_level * 2;
-// 		int pair_count = container.size() / pair_size;
-// 		int offset = 2 * pair_level;
-// 		int colorOffset = 0;
-// 		visualizePairs(container, offset);
-// 		// std::cout << "Sort pairs" << std::endl;
-// 		auto start = container.begin();
-// 		auto last = start + pair_level * pair_units_nbr;
-// 		auto end = last - (isOdd ? pair_level : 0);
-// 		for (auto it = start; it < end; it += offset)
-// 		{
-// 			auto thisPair = it + pair_level - 1;       // Last element of the current pair
-// 			auto nextPair = it + pair_level * 2 - 1;   // Last element of the next pair
-// 			if (*thisPair > *nextPair) {
-// 				std::swap_ranges(it, it + pair_level, it + pair_level);
-// 			}
-// 		}
-// 		visualizePairs(container, offset);
-
-// 		testMerge(container, pair_level * 2, recursionLevel + 1);
-// 		std::cout << "Main after pairing: ";
-// 		for (auto num : container)
-// 		{
-// 			std::cout << num << " ";
-// 		}
-// 		std::cout << std::endl;
-// 	}
-// }
-
 void log_pairs(std::vector<std::pair<std::vector<int>, std::vector<int>>> pairs, std::vector<int> odd_pair, std::vector<int> stray_numbers)
 {
 	std::cout << "Pairs: " << std::endl;
@@ -587,6 +198,8 @@ void log_sequence(const std::vector<std::vector<int>>& s, const std::string& tit
 	}
 	std::cout << std::endl;
 }
+// big thanks to emuminov for the explanation and visualization of the ford-johnson algorithm
+// https://dev.to/emuminov/human-explanation-and-step-by-step-visualisation-of-the-ford-johnson-algorithm-5g91
 
 
 void testMerge(std::vector<int>& container, int pair_level, int recursionLevel = 1)
@@ -756,25 +369,75 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 		}
 	}
 	std::cout << std::endl;
-	std::cout << GREEN << "odd pair: " << RESET;
-	for (const auto& num : odd_pair)
 	{
-		std::cout << num << " ";
+		std::cout << GREEN << "odd pair: " << RESET;
+		int i = 1;
+		for (const auto& num : odd_pair)
+		{
+			if (i == odd_pair.size())
+				std::cout << CYAN << num << RESET << " ";
+			else
+				std::cout << num << " ";
+			i++;
+		}
+		std::cout << std::endl;
 	}
-	std::cout << std::endl;
 
 
 
 	//? insert the pend into the main
-	int prev_jacobsthal = _jacobsthal_number(1);
 
 	//? start at index 1 because we have already inserted the first pair into the main
 	// TODO: implement the jacobsthal number insertion
-	// for (int i = 2;; i++)
-	// {
-	// 	int current_jacobsthal = _jacobsthal_number(i);
-	// 	int jacobsthal_diff = current_jacobsthal - prev_jacobsthal;
-	// }
+	int prev_jacobsthal = _jacobsthal_number(1);
+	int inserted_numbers = 0;
+	for (int i = 2;; i++)
+	{
+		int current_jacobsthal = _jacobsthal_number(i);
+		int jacobsthal_diff = current_jacobsthal - prev_jacobsthal;
+		int offser = 0;
+		if (jacobsthal_diff > pend.size())
+		{
+			std::cout << YELLOW << "Jacobsthal diff is greater than pend size, inserting the rest of the pend in sequential order" << RESET << std::endl;
+			break ;
+		}
+		int numbers_to_insert = jacobsthal_diff;
+		auto pend_start = pend.begin();
+		std::advance(pend_start, jacobsthal_diff - 1); // -1 because pend_start is the first element
+		auto main_search_end = main.begin();
+		std::advance(main_search_end, current_jacobsthal + inserted_numbers); // we add inserted_numbers because the main vector increases in size as we insert elements
+		std::cout << YELLOW << "-- " << "jacobsthall diff / pend start index: " << jacobsthal_diff - 1<< 
+		" main end index = jacobshtal number: " << current_jacobsthal << " + inserted numbers: " << inserted_numbers << " == " << current_jacobsthal + inserted_numbers - 1 << RESET << std::endl;
+		// " end search index main: (" << current_jacobsthal + inserted_numbers - 1 << " + inserted numbers)" << RESET << std::endl;
+		
+		// std::cout << "main_search_end: " << main_search_end->back() << std::endl;
+		std::cout << "search start: " << main.begin()->back() << " search end: " << (main_search_end - 1)->back() << std::endl;
+		while (numbers_to_insert)
+		{
+			// main_search_end.end() will not be included in the search
+			auto insert_pos = std::upper_bound(main.begin(), main_search_end, *pend_start, [](const auto& a, const auto& b) {
+				comparison_count++;
+				return a.back() < b.back();
+			});
+			std::cout << "inserting: " << pend_start->back() << std::endl;
+			auto inserted = main.insert(insert_pos, *pend_start);
+			pend_start = pend.erase(pend_start);
+			std::advance(pend_start, -1); // move the pend_start iterator back by one because we have erased the current element
+
+
+			// if the insert position is the same as the current main_search_end we know for a fact that that the next element will be atleast main_search_end - 1
+			offset = (inserted - main.begin()) == current_jacobsthal + inserted_numbers ? 1 : 0;
+			main_search_end = main.begin();
+			std::advance(main_search_end, current_jacobsthal + inserted_numbers - offset);
+
+
+			numbers_to_insert--;
+		}
+		log_sequence(main, "updated main: ", CYAN);
+		log_sequence(pend, "updated pend: ", YELLOW);
+		prev_jacobsthal = current_jacobsthal;
+		inserted_numbers += jacobsthal_diff;
+	}
 
 
 
@@ -787,7 +450,8 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	{
 		std::cout << "inserting: " << pend[i].back() << std::endl;
 
-		auto insert_pos = std::upper_bound(main.begin(), main.end(), pend[i], [](const auto& a, const auto& b) {
+		// we do + i because for every insertion we do, the main vector increases in size
+		auto insert_pos = std::upper_bound(main.begin(), main.end() - pend.size() + i, pend[i], [](const auto& a, const auto& b) {
 			comparison_count++;
 			return a.back() < b.back();
 		});
@@ -800,6 +464,7 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	//? insert the odd pair into the main
 	if (odd_pair.size())
 	{
+		std::cout << YELLOW << "Inserting odd pair into the main" << RESET << std::endl;
 		std::cout << "inserting: " << odd_pair.back() << std::endl;
 		auto insert_pos = std::upper_bound(main.begin(), main.end(), odd_pair, [](const auto& a, const auto& b) {
 			comparison_count++;
