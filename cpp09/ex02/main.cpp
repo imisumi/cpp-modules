@@ -1,4 +1,4 @@
-
+#include "PmergeMe.h"
 #include <iostream>
 #include <iostream>
 #include <string>
@@ -9,86 +9,19 @@
 
 static uint64_t comparison_count = 0;
 
-class ScopeTimer
+#define DEBUG_LOG 0
+#include <chrono>
+
+class Timer
 {
 public:
-	ScopeTimer(const std::string& name)
-		: m_name(name)
-	{
-		m_start = std::chrono::high_resolution_clock::now();
-	}
-
-	~ScopeTimer()
-	{
-		auto end = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - m_start);
-		std::cout << m_name << " took " << duration.count() << "us" << std::endl;
-	}
+	Timer() { Reset(); }
+	void Reset() { m_Start = std::chrono::high_resolution_clock::now(); }
+	float Elapsed() const { return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f; }
+	float ElapsedMillis() const { return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f; }
 private:
-	std::string m_name;
-	std::chrono::time_point<std::chrono::high_resolution_clock> m_start;
+	std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
 };
-
-void sortPair(std::vector<int>& nums, int i, int j)
-{
-	if (nums[i] > nums[j])
-	{
-		int tmp = nums[i];
-		nums[i] = nums[j];
-		nums[j] = tmp;
-	}
-}
-
-void sortSequence(std::vector<int>& nums, int i, int j)
-{
-	int split = i + ((j - i) / 2);
-	std::cout << "i: " << i << " j: " << j << " split: " << split << std::endl;
-
-	if (nums[split] > nums[j])
-	{
-		for (int k = i; k <= split; ++k)
-		{
-			int tmp = nums[k];
-			nums[k] = nums[j + k - split];
-			nums[j + k - split] = tmp;
-		}
-	}
-}
-
-void mergeInsertionSort(std::vector<int>& nums, int i, int j)
-{
-	
-}
-
-void mergeInsertionSort(std::vector<int>& nums)
-{
-
-}
-
-#define CYAN "\033[36m"
-#define YELLOW "\033[33m"
-#define RESET "\033[0m"
-#define GREEN "\033[32m"
-#define RED "\033[31m"
-
-
-#define BRIGHT_CYAN "\033[38;5;51m"
-#define DIM_CYAN "\033[38;5;30m"
-#define BRIGHT_YELLOW "\033[38;5;11m"
-#define DIM_YELLOW "\033[38;5;100m"
-#define RESET "\033[0m"
-
-#include <ranges>
-
-void range()
-{
-	std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8};
-	auto subRange = std::ranges::subrange(v.begin(), v.begin() + 4);
-	for (auto num : subRange)
-	{
-		std::cout << num << " ";
-	}
-}
 
 void visualizePairs(const std::vector<int>& c, int offset)
 {
@@ -115,23 +48,10 @@ void visualizePairs(const std::vector<int>& c, int offset)
 	std::cout << std::endl;
 }
 
-int jacobsthal(int n)
-{
-	if (n == 0)
-	{
-		return 0;
-	}
-	if (n == 1)
-	{
-		return 1;
-	}
-	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
-}
-
 #include <cmath>
 #include <algorithm>
 
-int _jacobsthal_number(long n)
+int jacobsthalNumber(long n)
 {
 	return round((pow(2, n + 1) + pow(-1, n)) / 3);
 }
@@ -143,18 +63,12 @@ void log_pairs(std::vector<std::pair<std::vector<int>, std::vector<int>>> pairs,
 	std::string colors[] = {BRIGHT_YELLOW, DIM_YELLOW, BRIGHT_CYAN, DIM_CYAN};
 	for (const auto& pair : pairs)
 	{
-		// Alternate colors for the first vector of the pair
-		// color = (i % 2 == 0) ? BRIGHT_YELLOW : BRIGHT_CYAN;
 		for (const auto& num : pair.first)
 		{
 			std::cout << colors[i % 4] << num << " ";
 		}
-
-		// Alternate colors for the second vector of the pair
-		// color = (i % 2 == 0) ? BRIGHT_CYAN : BRIGHT_YELLOW;
 		for (const auto& num : pair.second)
 		{
-			// std::cout << color << num << " ";
 			std::cout << colors[(i + 1) % 4] << num << " ";
 		}
 		i+=2;
@@ -167,28 +81,17 @@ void log_pairs(std::vector<std::pair<std::vector<int>, std::vector<int>>> pairs,
 	{
 		std::cout << RESET << num << " ";
 	}
-	std::cout << RESET << std::endl; // Reset color to default
+	std::cout << RESET << std::endl;
 }
-
-
-#include <assert.h>
 
 void log_sequence(const std::vector<std::vector<int>>& s, const std::string& title = "", const std::string& color = "")
 {
-	// std::cout << titles;
-	// for (const auto& num : sequence)
-	// {
-	// 	std::cout << color << num << " ";
-	// }
-	// std::cout << RESET << std::endl;
-
 	std::cout << color << title << " " << RESET;
 	for (const auto& sequence : s)
 	{
 		int i = 1;
 		for (const auto& num : sequence)
 		{
-			// if (num == sequence.back())
 			if (i % sequence.size() == 0)
 				std::cout << CYAN << num << RESET << " ";
 			else
@@ -198,20 +101,33 @@ void log_sequence(const std::vector<std::vector<int>>& s, const std::string& tit
 	}
 	std::cout << std::endl;
 }
+
+void log_sequence(const std::vector<int>& s, const std::string& title = "", const std::string& color = "")
+{
+	std::cout << color << title << " " << RESET;
+	int i = 1;
+	for (const auto& num : s)
+	{
+		if (i % s.size() == 0)
+			std::cout << CYAN << num << RESET << " ";
+		else
+			std::cout << num << " ";
+		i++;
+	}
+	std::cout << std::endl;
+}
 // big thanks to emuminov for the explanation and visualization of the ford-johnson algorithm
 // https://dev.to/emuminov/human-explanation-and-step-by-step-visualisation-of-the-ford-johnson-algorithm-5g91
 
-
-void testMerge(std::vector<int>& container, int pair_level, int recursionLevel = 1)
+void mergeInsertionSort(std::vector<int>& container, int pair_level, int recursionLevel = 1)
 {
 	// Calculate the number of pairs
 	int pair_units_nbr = container.size() / pair_level;
-	bool isOdd = pair_units_nbr % 2 == 1;
 
-	// Base case: return if fewer than 2 pairs
 	if (pair_units_nbr < 2)
 		return;
 
+	bool isOdd = pair_units_nbr % 2 == 1;
 	int offset = 2 * pair_level;
 	int pair_size = pair_level * 2;
 
@@ -230,7 +146,6 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 		auto nextPairEnd = it + 2 * pair_level - 1;  // Last element of the next pair
 		std::vector<int> sequence_one = std::vector<int>(it, currentPairEnd + 1);
 		std::vector<int> sequence_two = std::vector<int>(it + pair_level, nextPairEnd + 1);
-		// std::cout << "Comparing: " << sequence_one.back() << " " << sequence_two.back() << std::endl;
 		if (sequence_one.back() > sequence_two.back())
 		{
 			comparison_count++;
@@ -250,15 +165,16 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	for (; it < container.end(); std::advance(it, 1))
 	{
 		stray_numbers.push_back(*it);
-		std::cout << "Stray number: " << *it << std::endl;
 	}
+#if DEBUG_LOG
 	log_pairs(pairs, odd_pair, stray_numbers);
+#endif
 
 	{
-		// I can just use container.size(), but I do this to catch any errors
 		size_t size = pairs.size() * (pairs[0].first.size() * 2) + odd_pair.size() + stray_numbers.size();
 		assert(size == container.size());
 	}
+
 	container.clear();
 	for (const auto& pair : pairs)
 	{
@@ -268,17 +184,14 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	container.insert(container.end(), odd_pair.begin(), odd_pair.end());
 	container.insert(container.end(), stray_numbers.begin(), stray_numbers.end());
 
-	// Recursive call for further merging
-	testMerge(container, pair_level * 2, recursionLevel + 1);
+	//? Recursive call for further merging
+	mergeInsertionSort(container, pair_level * 2, recursionLevel + 1);
+#if DEBUG_LOG
 	std::ranges::for_each(container, [](const int& num) { std::cout << num << " "; });
 	std::cout << std::endl;
-
-
-
-
+#endif
 
 	//! Bad code repitition
-
 	pairs.clear();
 	odd_pair.clear();
 	stray_numbers.clear();
@@ -307,20 +220,8 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	for (; it < container.end(); std::advance(it, 1))
 	{
 		stray_numbers.push_back(*it);
-		std::cout << "Stray number: " << *it << std::endl;
 	}
-
 	//! Bad code repitition
-
-
-
-
-
-
-
-
-
-
 
 	//? initialize the main and pend vectors
 	std::vector<std::vector<int>> main;
@@ -337,68 +238,26 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 		main.push_back(pairs[i].second);
 	}
 
-
-	// int index = 1;
-	std::cout << YELLOW << "initial main: " << RESET;
-	for (const auto& sequence : main)
-	{
-		int i = 1;
-		for (const auto& num : sequence)
-		{
-			// if (num == sequence.back())
-			if (i % sequence.size() == 0)
-				std::cout << CYAN << num << RESET << " ";
-			else
-				std::cout << num << " ";
-			i++;
-		}
-	}
-	std::cout << std::endl;
-	std::cout << CYAN << "initial pend: " << RESET;
-	for (const auto& sequence : pend)
-	{
-		int i = 1;
-		for (const auto& num : sequence)
-		{
-			// if (num == sequence.back())
-			if (i % sequence.size() == 0)
-				std::cout << CYAN << num << RESET << " ";
-			else
-				std::cout << num << " ";
-			i++;
-		}
-	}
-	std::cout << std::endl;
-	{
-		std::cout << GREEN << "odd pair: " << RESET;
-		int i = 1;
-		for (const auto& num : odd_pair)
-		{
-			if (i == odd_pair.size())
-				std::cout << CYAN << num << RESET << " ";
-			else
-				std::cout << num << " ";
-			i++;
-		}
-		std::cout << std::endl;
-	}
-
-
+#if DEBUG_LOG
+	log_sequence(main, "initial main:", YELLOW);
+	log_sequence(pend, "initial pend:", CYAN);
+	log_sequence(odd_pair, "odd pair:", GREEN);
+#endif
 
 	//? insert the pend into the main
-
-	//? start at index 1 because we have already inserted the first pair into the main
-	// TODO: implement the jacobsthal number insertion
-	int prev_jacobsthal = _jacobsthal_number(1);
+	int prev_jacobsthal = jacobsthalNumber(1);
 	int inserted_numbers = 0;
+	//? we start from 2 because we have already inserted the first pair into the main vector
 	for (int i = 2;; i++)
 	{
-		int current_jacobsthal = _jacobsthal_number(i);
+		int current_jacobsthal = jacobsthalNumber(i);
 		int jacobsthal_diff = current_jacobsthal - prev_jacobsthal;
 		int offser = 0;
 		if (jacobsthal_diff > pend.size())
 		{
+		#if DEBUG_LOG
 			std::cout << YELLOW << "Jacobsthal diff is greater than pend size, inserting the rest of the pend in sequential order" << RESET << std::endl;
+		#endif
 			break ;
 		}
 		int numbers_to_insert = jacobsthal_diff;
@@ -406,51 +265,48 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 		std::advance(pend_start, jacobsthal_diff - 1); // -1 because pend_start is the first element
 		auto main_search_end = main.begin();
 		std::advance(main_search_end, current_jacobsthal + inserted_numbers); // we add inserted_numbers because the main vector increases in size as we insert elements
+	#if DEBUG_LOG
 		std::cout << YELLOW << "-- " << "jacobsthall diff / pend start index: " << jacobsthal_diff - 1<< 
 		" main end index = jacobshtal number: " << current_jacobsthal << " + inserted numbers: " << inserted_numbers << " == " << current_jacobsthal + inserted_numbers - 1 << RESET << std::endl;
-		// " end search index main: (" << current_jacobsthal + inserted_numbers - 1 << " + inserted numbers)" << RESET << std::endl;
-		
-		// std::cout << "main_search_end: " << main_search_end->back() << std::endl;
 		std::cout << "search start: " << main.begin()->back() << " search end: " << (main_search_end - 1)->back() << std::endl;
+	#endif
 		while (numbers_to_insert)
 		{
-			// main_search_end.end() will not be included in the search
+			//? main_search_end.end() will not be included in the search
 			auto insert_pos = std::upper_bound(main.begin(), main_search_end, *pend_start, [](const auto& a, const auto& b) {
 				comparison_count++;
 				return a.back() < b.back();
 			});
+		#if DEBUG_LOG
 			std::cout << "inserting: " << pend_start->back() << std::endl;
+		#endif
 			auto inserted = main.insert(insert_pos, *pend_start);
 			pend_start = pend.erase(pend_start);
 			std::advance(pend_start, -1); // move the pend_start iterator back by one because we have erased the current element
 
-
-			// if the insert position is the same as the current main_search_end we know for a fact that that the next element will be atleast main_search_end - 1
+			//? if the insert position is the same as the current main_search_end we know for a fact that that the next element will be atleast main_search_end - 1
 			offset = (inserted - main.begin()) == current_jacobsthal + inserted_numbers ? 1 : 0;
 			main_search_end = main.begin();
 			std::advance(main_search_end, current_jacobsthal + inserted_numbers - offset);
 
-
 			numbers_to_insert--;
 		}
+	#if DEBUG_LOG
 		log_sequence(main, "updated main: ", CYAN);
 		log_sequence(pend, "updated pend: ", YELLOW);
+	#endif
 		prev_jacobsthal = current_jacobsthal;
 		inserted_numbers += jacobsthal_diff;
 	}
 
-
-
-
-
-
-
 	//? insert the remaing pend into the main
 	for (int i = 0; i < pend.size(); i++)
 	{
+	#if DEBUG_LOG
 		std::cout << "inserting: " << pend[i].back() << std::endl;
+	#endif
 
-		// we do + i because for every insertion we do, the main vector increases in size
+		//? we do + i because for every insertion we do, the main vector increases in size
 		auto insert_pos = std::upper_bound(main.begin(), main.end() - pend.size() + i, pend[i], [](const auto& a, const auto& b) {
 			comparison_count++;
 			return a.back() < b.back();
@@ -459,13 +315,13 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	}
 	pend.clear();
 
-
-
 	//? insert the odd pair into the main
 	if (odd_pair.size())
 	{
+	#if DEBUG_LOG
 		std::cout << YELLOW << "Inserting odd pair into the main" << RESET << std::endl;
 		std::cout << "inserting: " << odd_pair.back() << std::endl;
+	#endif
 		auto insert_pos = std::upper_bound(main.begin(), main.end(), odd_pair, [](const auto& a, const auto& b) {
 			comparison_count++;
 			return a.back() < b.back();
@@ -474,20 +330,21 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	}
 	odd_pair.clear();
 
+#if DEBUG_LOG
 	log_sequence(main, "Main: ", CYAN);
 	log_sequence(pend, "Pend: ", YELLOW);
+#endif
 
 	//? insert the stray numbers into the main
 	if (stray_numbers.size())
 	{
 		main.push_back(stray_numbers);
 		stray_numbers.clear();
+	#if DEBUG_LOG
 		log_sequence(main, "Main: ", CYAN);
 		log_sequence(pend, "Pend: ", YELLOW);
+	#endif
 	}
-
-
-
 
 	{
 		size_t size = 0;
@@ -497,7 +354,9 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 		}
 		size += stray_numbers.size();
 
+	#if DEBUG_LOG
 		std::cout << "Size: " << size << std::endl;
+	#endif
 		assert(size == container.size());
 	}
 	container.clear();
@@ -505,78 +364,52 @@ void testMerge(std::vector<int>& container, int pair_level, int recursionLevel =
 	{
 		container.insert(container.end(), sequence.begin(), sequence.end());
 	}
-	
+
+#if DEBUG_LOG
 	std::cout << "----------------------------------------------------------------------------------------------" << std::endl;
+#endif
 }
+
 
 int main(int argc, char* argv[])
 {
-	std::vector<int> nums;
-	nums.reserve(argc - 1);
-	for (int i = 1; i < argc; ++i)
+	if (argc < 2)
 	{
-		try
-		{
-			nums.push_back(std::stoi(argv[i]));
-		}
-		catch (const std::invalid_argument& e)
-		{
-			std::cerr << "Invalid argument: " << argv[i] << std::endl;
-			return 1;
-		}
-		catch (const std::out_of_range& e)
-		{
-			std::cerr << "Out of range: " << argv[i] << std::endl;
-			return 1;
-		}
+		std::cerr << "Please provide a list of numbers to sort" << std::endl;
+		return EXIT_FAILURE;
 	}
-
-
-	// for (size_t i = 0; i < nums.size(); i += 2)
-	// {
-	// 	// sortPair(nums, i, i + 1);
-	// 	sortSequence(nums, i, i + 1);
-	// }
-
-	testMerge(nums, 1);
-
-	std::cout << "Total comparisons: " << comparison_count << std::endl;
-
-	// lambda function to check if nums is sorted
-	auto isSorted = [](const std::vector<int>& nums) {
-		for (size_t i = 0; i < nums.size() - 1; ++i)
-		{
-			if (nums[i] > nums[i + 1])
-				return false;
-		}
-		return true;
-	};
-
-	std::cout << "Is sorted: " << (isSorted(nums) ? "Yes" : "No") << std::endl;
-
-	// std::ranges::for_each(nums, [](const int& num) { std::cout << num << " "; });
-	// std::cout << std::endl;
-	return 0;
-
-	// for (size_t group = 2; (group * 2 ) <= nums.size(); group *= 2)
-	// {
-	// 	// for (size_t i = 0; i < nums.size(); i += group)
-	// 	std::cout << "-------------------------------------------------" << group << std::endl;
-	// 	for (size_t i = 0; (i + group - 1) < nums.size(); i += group)
-	// 	{
-	// 		sortSequence(nums, i, i + group - 1);
-	// 		// break;
-	// 	}
-	// 	// break ;
-	// 	// if (group == 8)
-	// 	// {
-	// 	// 	break;
-	// 	// }
-	// }
-
-	for (auto num : nums)
+	try
 	{
-		std::cout << num << " ";
+		Timer timer;
+		std::vector<int> v = fillContainer<std::vector<int>>(argv, argc);
+		float initilizeTime = timer.ElapsedMillis();
+		std::cout << CYAN << "std::vector " << RESET << "initializing took: " << CYAN << initilizeTime << "ms" << RESET << std::endl;
+
+		logSequence(v, "Before:", 3);
+
+		timer.Reset();
+		mergeInsertionSort(v, 1);
+		float mergeTime = timer.ElapsedMillis();
+
+		logSequence(v, "After: ", 3);
+
+
+		std::cout << "Time to process a range of " << CYAN << argc - 1 << RESET 
+		<< " elements with " << CYAN << "std::vector " << RESET << "took: " << CYAN << mergeTime << "ms" << RESET << std::endl;
 	}
-	std::cout << std::endl;
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	try
+	{
+		Timer timer;
+		std::list<int> l = fillContainer<std::list<int>>(argv, argc);
+		float initilizeTime = timer.ElapsedMillis();
+		std::cout << "std::lists  initializing took: " << initilizeTime << "ms" << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 }
