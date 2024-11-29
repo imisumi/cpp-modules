@@ -1,16 +1,13 @@
 #!/bin/bash
 
+# Define ANSI color codes
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+RESET="\033[0m"
+
 # Function to generate a random sequence of numbers
 generate_random_numbers() {
     local num_count=$((RANDOM % 3000 + 1))  # Number of numbers (1-3000)
-    local numbers=""
-    
-    # Generate random numbers (with or without duplicates)
-    for ((i=0; i<num_count; i++)); do
-        numbers+=$((RANDOM % 10000 + 1))" "  # Random numbers between 1 and 10000
-    done
-    
-    # Return the number of numbers to be used for success/fail output
     echo "$num_count"
 }
 
@@ -30,10 +27,11 @@ run_test() {
 
     # Check if the program returns 1 (error)
     if [ $exit_code -eq 1 ]; then
-        echo "FAIL: $num_count"
+        echo -e "${RED}FAIL: $num_count${RESET}"
         echo "Sequence: ${args[@]}"  # Print the sequence of numbers if it fails
+        exit 1  # Exit on failure
     else
-        echo "SUCCESS: $num_count"
+        echo -e "${GREEN}SUCCESS: $num_count${RESET}"
     fi
 }
 
@@ -41,5 +39,5 @@ run_test() {
 for i in {1..10000}; do  # You can adjust the number of iterations
     num_count=$(generate_random_numbers)
     run_test "$num_count"
-    sleep 1  # Optional: Adding a small delay between runs for stability
+    # sleep 1  # Optional: Adding a small delay between runs for stability
 done
